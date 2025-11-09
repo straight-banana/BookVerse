@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookVerse</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <style type="text/tailwindcss">
+        @layer components {
+            
+
+        }
+        
+        @layer utilities{
+            button{
+                @apply rounded-xl m-[5px] p-[5px] w-[200px] shadow-xl border-1 border-gray-200 hover:scale-105
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-cover bg-no-repeat bg-center bg-fixed h-screen" 
+      style="background-image: url('./bg.jpg');">
+    <nav class="px-[50px] flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-yellow-700">BookVerse</h1>
+        </div>
+        <div class="flex justify-center items-center h-[10vh] relative">
+            <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 blur-sm w-[55vh] h-[5vh] -z-5 absolute"></div>
+            <input id="search" type="text" placeholder="Search" class="items-center py-1 px-3 w-[55vh] h-[5vh] border bg-white rounded-[1vh] mr-0 z-0">
+        </div>
+        <div class="flex">
+            <button class="text-lg font-bold bg-gradient-to-r from-yellow-200 to-yellow-400 w-[100px]">Profile</button>
+            <button class="text-lg font-bold bg-yellow-200 w-[50px]">⚙️</button>
+        </div>
+    </nav>
+
+    <main class="flex flex-col items-center">
+        <h1 class="text-4xl font-bold">Discover Worlds Between Words</h1>
+        <p class="px-120 text-xl text-gray-500 text-center">Your futuristic library for exploring, reviewing, and discovering your next favorite book</p>
+        <div class="flex">
+            <button>Trending</button>
+            <button>Top Rated</button>
+            <button>Best Seller</button>
+            <button>Recommended</button>
+        </div>
+        <div id="hero" class="py-[5vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[20px] relative">
+                
+        </div>
+    </main>
+    
+    
+    <script>
+        const hero = document.getElementById("hero");
+        const searchInput = document.getElementById("search");
+
+        // Map buttons to real categories
+        const categories = {
+        Trending: "fiction",
+        "Top Rated": "bestseller",
+        "Best Seller": "popular books",
+        Recommended: "editor's choice"
+        };
+
+        // Fetch books from Google Books API
+        async function fetchBooks(query = "popular") {
+        hero.innerHTML = `<p class='text-gray-400 text-lg col-span-full'>Loading books...</p>`;
+        try {
+            const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=9`);
+            const data = await res.json();
+            hero.innerHTML = "";
+
+            if (!data.items) {
+            hero.innerHTML = `<p class='text-gray-500'>No results found for "${query}".</p>`;
+            return;
+            }
+
+            data.items.forEach(book => {
+            const info = book.volumeInfo;
+            const title = info.title || "Unknown Title";
+            const author = info.authors ? info.authors.join(", ") : "Unknown Author";
+            const img = info.imageLinks ? info.imageLinks.thumbnail : "https://via.placeholder.com/150x220?text=No+Image";
+            const rating = info.averageRating || (Math.random() * 2 + 3).toFixed(1);
+            const categories = info.categories || ["General"];
+
+            const card = document.createElement("div");
+            card.className = "rounded-2xl shadow-lg p-4 bg-gradient-to-b from-yellow-200 to-yellow-400 w-[280px] hover:scale-105 transition-all";
+            card.innerHTML = `
+                <div class="relative">
+                <img src="${img}" alt="${title}" class="rounded-xl w-full h-[220px] object-cover">
+                <span class="absolute top-2 right-2 bg-white px-2 py-1 rounded-lg text-sm font-semibold flex items-center gap-1 shadow-lg
+                ">⭐ ${rating}</span>
+                </div>
+                <h3 class="text-lg font-bold mt-3">${title}</h3>
+                <p class="text-gray-500 text-sm mb-2">${author}</p>
+                <div class="flex flex-wrap gap-1">
+                ${categories.slice(0,2).map(cat => `<span class="text-xs bg-yellow-100 px-2 py-1 rounded-xl">${cat}</span>`).join("")}
+                </div>
+            `;
+            hero.appendChild(card);
+            });
+        } catch (error) {
+            hero.innerHTML = `<p class='text-red-500'>Failed to load books</p>`;
+            console.error(error);
+        }
+        }
+
+        // Load "popular" by default
+        fetchBooks("popular");
+
+        // Search live typing
+        searchInput.addEventListener("input", (e) => {
+        const query = e.target.value.trim();
+        if (query.length > 2) fetchBooks(query);
+        });
+
+        // Button controls
+        document.querySelectorAll("button").forEach(btn => {
+        const text = btn.textContent.trim();
+        if (categories[text]) {
+            btn.addEventListener("click", () => {
+            fetchBooks(categories[text]);
+            });
+        }
+        });
+    </script>
+
+
+</body>
+</html>

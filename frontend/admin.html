@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - BookVerse</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50">
+    <nav class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-yellow-700 cursor-pointer" onclick="window.location.href='index.html'">BookVerse</h1>
+            </div>
+            <div class="flex gap-2">
+                <button id="profileBtn" class="px-6 py-2 bg-gradient-to-r from-yellow-200 to-yellow-400 font-bold rounded-lg hover:scale-105 transition cursor-default">
+                    Admin Panel
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold mb-6">Add New Book</h2>
+                    <form id="addBookForm" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Title *</label>
+                            <input id="bookTitle" type="text" placeholder="Book title" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Author</label>
+                            <input id="bookAuthor" type="text" placeholder="Author name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Image URL</label>
+                            <input id="bookImage" type="url" placeholder="https://example.com/book-image.jpg" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Tags (comma-separated)</label>
+                            <input id="bookTags" type="text" placeholder="e.g. Fiction, Mystery" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Buy Links (comma-separated)</label>
+                            <input id="bookBuyLinks" type="text" placeholder="e.g. https://amazon.com/..." class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">PDF Links (comma-separated)</label>
+                            <input id="bookPdfLinks" type="text" placeholder="e.g. https://example.com/book.pdf" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600">
+                            Add Book
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold mb-6">Books Inventory</h2>
+                    <div id="booksTable" class="space-y-4">
+                        <p class="text-gray-500 text-center">Loading books...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
+
